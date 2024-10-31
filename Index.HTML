@@ -146,62 +146,6 @@
         .heart2 { top: 5%; right: 5%; }
         .heart3 { bottom: 5%; left: 5%; }
         .heart4 { bottom: 5%; right: 5%; }
-
-        /* Media Queries para diferentes dispositivos */
-        @media (max-width: 480px) {
-            :root {
-                --envelope-width: 85vw;
-            }
-
-            .message br {
-                display: none;
-            }
-
-            .message {
-                padding: 0 min(0.5rem, 2vw);
-            }
-        }
-
-        @media (min-width: 481px) and (max-width: 768px) {
-            :root {
-                --envelope-width: 80vw;
-            }
-        }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-            :root {
-                --envelope-width: 70vw;
-            }
-        }
-
-        @media (orientation: landscape) and (max-height: 500px) {
-            .envelope.open .card {
-                transform: translateY(calc(var(--envelope-height) * -0.8));
-            }
-        }
-
-        /* Soporte para modo oscuro */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #400000 0%, #800000 100%);
-            }
-
-            .card {
-                background: linear-gradient(45deg, #fff0f0 0%, #fff 100%);
-            }
-
-            .click-me {
-                color: #ff9999;
-            }
-        }
-
-        /* Soporte para preferencias de movimiento reducido */
-        @media (prefers-reduced-motion: reduce) {
-            .envelope, .envelope::before, .card, .heart {
-                transition: none;
-                animation: none;
-            }
-        }
     </style>
 </head>
 <body>
@@ -223,9 +167,18 @@
         </div>
     </div>
 
+    <audio id="audio" src="Audio.mp3"></audio> <!-- Reemplaza "audio.mp3" con la ruta de tu archivo de sonido -->
+
     <script>
         function toggleEnvelope(envelope) {
             envelope.classList.toggle('open');
+            var audio = document.getElementById("audio");
+            if (envelope.classList.contains('open')) {
+                audio.play(); // Reproduce el audio al abrir
+            } else {
+                audio.pause(); // Pausa el audio al cerrar
+                audio.currentTime = 0; // Reinicia el audio
+            }
         }
     </script>
 </body>
