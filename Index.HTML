@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --envelope-width: min(90vw, 300px);
+            --envelope-height: calc(var(--envelope-width) * 0.66);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ffecec 0%, #ff8080 100%);
+            font-family: 'Arial', sans-serif;
+            padding: 1rem;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .envelope {
+            position: relative;
+            width: var(--envelope-width);
+            height: var(--envelope-height);
+            background: #ff4d4d;
+            border-radius: min(1rem, 3%);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: calc(var(--envelope-width) * 0.5) solid transparent;
+            border-right: calc(var(--envelope-width) * 0.5) solid transparent;
+            border-top: calc(var(--envelope-height) * 0.5) solid #ff6666;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+        }
+
+        .envelope.open::before {
+            transform: rotateX(180deg);
+        }
+
+        .card {
+            position: absolute;
+            width: calc(var(--envelope-width) - 20px);
+            height: calc(var(--envelope-height) - 20px);
+            background: linear-gradient(45deg, #fff5f5 0%, #fff 100%);
+            border-radius: min(0.5rem, 2%);
+            padding: min(1rem, 3vw);
+            text-align: center;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.1);
+            top: 10px;
+            left: 10px;
+            transition: transform 0.5s ease;
+            transform: translateY(0px);
+            opacity: 0;
+            border: 2px solid #ff9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .envelope.open .card {
+            transform: translateY(calc(var(--envelope-height) * -0.6));
+            opacity: 1;
+        }
+
+        .heart {
+            color: #ff0000;
+            font-size: min(2rem, 8vw);
+            margin: min(0.5rem, 2vw) 0;
+            text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.2);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .message {
+            font-size: min(1rem, 4vw);
+            line-height: 1.5;
+            color: #cc0000;
+            margin: min(0.8rem, 3vw) 0;
+            text-shadow: 1px 1px 2px rgba(255, 0, 0, 0.1);
+        }
+
+        .signature {
+            font-style: italic;
+            color: #ff1a1a;
+            margin-top: min(1rem, 4vw);
+            font-weight: bold;
+            font-size: min(1rem, 4vw);
+        }
+
+        .click-me {
+            position: absolute;
+            bottom: min(-2rem, -8vw);
+            left: 50%;
+            transform: translateX(-50%);
+            color: #990000;
+            font-size: min(0.9rem, 3.5vw);
+            opacity: 0.8;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+            white-space: nowrap;
+        }
+
+        .decorative-hearts {
+            position: absolute;
+            font-size: min(1rem, 4vw);
+            color: #ff3333;
+            opacity: 0.6;
+        }
+
+        .heart1 { top: 5%; left: 5%; }
+        .heart2 { top: 5%; right: 5%; }
+        .heart3 { bottom: 5%; left: 5%; }
+        .heart4 { bottom: 5%; right: 5%; }
+
+        /* Media Queries para diferentes dispositivos */
+        @media (max-width: 480px) {
+            :root {
+                --envelope-width: 85vw;
+            }
+
+            .message br {
+                display: none;
+            }
+
+            .message {
+                padding: 0 min(0.5rem, 2vw);
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            :root {
+                --envelope-width: 80vw;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            :root {
+                --envelope-width: 70vw;
+            }
+        }
+
+        @media (orientation: landscape) and (max-height: 500px) {
+            .envelope.open .card {
+                transform: translateY(calc(var(--envelope-height) * -0.8));
+            }
+        }
+
+        /* Soporte para modo oscuro */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #400000 0%, #800000 100%);
+            }
+
+            .card {
+                background: linear-gradient(45deg, #fff0f0 0%, #fff 100%);
+            }
+
+            .click-me {
+                color: #ff9999;
+            }
+        }
+
+        /* Soporte para preferencias de movimiento reducido */
+        @media (prefers-reduced-motion: reduce) {
+            .envelope, .envelope::before, .card, .heart {
+                transition: none;
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="envelope" onclick="toggleEnvelope(this)">
+            <div class="card">
+                <div class="decorative-hearts heart1">❤</div>
+                <div class="decorative-hearts heart2">❤</div>
+                <div class="decorative-hearts heart3">❤</div>
+                <div class="decorative-hearts heart4">❤</div>
+                <div class="heart">❤</div>
+                <div class="message">
+                    FELIZ CUMPLEAÑOS
+                    MENDIGA LOQUILLA.
+                </div>
+                <div class="signature">DE PARTE DE AVIRODRIAN</div>
+            </div>
+            <div class="click-me">Haz clic para abrir</div>
+        </div>
+    </div>
+
+    <script>
+        function toggleEnvelope(envelope) {
+            envelope.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
